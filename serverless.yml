@@ -90,6 +90,13 @@ functions:
       - http:
           path: /v1/example/{code}
           method: delete
+  
+  dispatcher:
+    handler: dispatcher.handler
+    events:
+      - sns:
+          arn: !Ref SuperTopic
+          topicName: SendChallengeTopic
 
 # you can add CloudFormation resource templates here
 resources:
@@ -108,7 +115,10 @@ resources:
         Tags:
           - Key: "Project"
             Value: ${self:service}
-
+    SuperTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: SendChallengeTopic
 #  Outputs:
 #     NewOutput:
 #       Description: "Description for the output"
